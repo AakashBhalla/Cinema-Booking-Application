@@ -10,7 +10,7 @@ public class AddMovieModel {
 		try {
 			Connection connection = SQLiteConnection.Connector();
 			pstm = connection.prepareStatement(sql);
-			pstm.setString(1, title);
+			pstm.setString(1, title); //deletthis
 			pstm.setString(2, date);
 			pstm.setString(3, time);
 			pstm.setString(4, image);
