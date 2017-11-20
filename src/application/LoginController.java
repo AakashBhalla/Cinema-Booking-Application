@@ -32,7 +32,7 @@ public class LoginController implements Initializable{
 	private TextField txtUsername;
 	
 	@FXML
-	private TextField txtPassword; //delet this
+	private TextField txtPassword; 
 	
 	@FXML 
 	private Button btnLogin;

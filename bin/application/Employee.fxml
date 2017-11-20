@@ -15,6 +15,7 @@
                   <Font size="15.0" />
                </font>
             </Label>
+            <Button fx:id="btnAdd" layoutX="268.0" layoutY="161.0" mnemonicParsing="false" onAction="#AddMovie" text="Add Movie" />
          </children>
       </AnchorPane>
    </top>

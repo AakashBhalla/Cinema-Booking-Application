@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400" prefWidth="500" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AddMovieController">
+   <children>
+      <Label layoutX="77.0" layoutY="58.0" text="Movie Title: " />
+      <Label layoutX="78.0" layoutY="88.0" text="Date:" />
+      <Label layoutX="78.0" layoutY="123.0" text="Time:" />
+      <Label layoutX="77.0" layoutY="157.0" text="Image URL:" />
+      <Label layoutX="76.0" layoutY="192.0" text="Description:" />
+      <TextField fx:id="txtTitle" layoutX="166.0" layoutY="54.0" />
+      <DatePicker fx:id="datePicker" layoutX="166.0" layoutY="84.0" />
+      <TextField fx:id="txt1" layoutX="166.0" layoutY="119.0" onAction="#timeControl" prefHeight="25.0" prefWidth="28.0" promptText="00" />
+      <Label layoutX="194.0" layoutY="123.0" text=":" />
+      <TextField fx:id="txt2" layoutX="197.0" layoutY="119.0" onAction="#timeControl" prefHeight="25.0" prefWidth="29.0" promptText="00" />
+      <TextField fx:id="txtImg" layoutX="166.0" layoutY="153.0" />
+      <Label fx:id="lblMsg" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="3.0" layoutY="339.0" prefHeight="17.0" prefWidth="500.0" />
+      <Button fx:id="btnSubmit" layoutX="274.0" layoutY="361.0" mnemonicParsing="false" onAction="#Submit" text="Submit" />
+      <TextArea fx:id="txtDescription" layoutX="166.0" layoutY="192.0" prefHeight="140.0" prefWidth="149.0" />
+      <Label layoutX="225.0" layoutY="123.0" text="-" />
+      <TextField fx:id="txt3" layoutX="229.0" layoutY="119.0" onAction="#timeControl" prefHeight="25.0" prefWidth="28.0" promptText="00" />
+      <Label layoutX="257.0" layoutY="123.0" text=":" />
+      <TextField fx:id="txt4" layoutX="260.0" layoutY="119.0" onAction="#timeControl" prefHeight="25.0" prefWidth="28.0" promptText="00" />
+      <Button fx:id="btnCancel" layoutX="167.0" layoutY="361.0" mnemonicParsing="false" onAction="#Cancel" text="Cancel" />
+   </children>
+</AnchorPane>
