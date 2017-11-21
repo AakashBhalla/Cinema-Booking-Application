@@ -4,15 +4,15 @@ import java.sql.*;
 
 public class LoginModel {
 	Connection connection;
+
 	public LoginModel() {
 		connection = SQLiteConnection.Connector();
 		if (connection == null) {
 			System.out.println("Connection not successful");
 			System.exit(1);
 		}
-		
 	}
-	
+
 	public boolean isDbConnected() {
 		try {
 			return !connection.isClosed();
@@ -21,7 +21,7 @@ public class LoginModel {
 			return false;
 		}
 	}
-	
+
 	public boolean isLogin(String user, String pass) throws SQLException {
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -30,24 +30,16 @@ public class LoginModel {
 			preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1, user);
 			preparedStatement.setString(2, pass);
-			
+
 			resultSet = preparedStatement.executeQuery();
-			if (resultSet.next()) {
-				return true;
-			}
-			else {
-				return false;
-			}
-			
+			return resultSet.next() ? true:false;
 		} catch (Exception e) {
 			return false;
 		} finally {
 			preparedStatement.close();
-
 		}
-		
 	}
-	
+
 	public String roleLogin(String user, String pass) throws SQLException {
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -56,15 +48,13 @@ public class LoginModel {
 			preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1, user);
 			preparedStatement.setString(2, pass);
-			
+
 			resultSet = preparedStatement.executeQuery();
 			if (resultSet.next()) {
 				return resultSet.getString("position");
-			}
-			else {
+			} else {
 				return null;
 			}
-			
 		} catch (Exception e) {
 			return null;
 		} finally {

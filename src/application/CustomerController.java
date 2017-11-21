@@ -16,18 +16,17 @@ public class CustomerController {
 	private Label welcomeLbl;
 	@FXML
 	private Button btnLogout;
-	
-	public void getUser (String user) {
+
+	public void getUser(String user) {
 		welcomeLbl.setText("Welcome customer, " + user + ".");
 	}
-	
+
 	public void Logout(ActionEvent event) {
 		FXMLLoader loader = new FXMLLoader();
 		try {
 			Pane employeePane = loader.load(getClass().getResource("/application/Login.fxml").openStream());
 			Scene employeeScene = new Scene(employeePane);
-			//This line gets the Stage information
-			Stage window = (Stage)(((Node) event.getSource()).getScene().getWindow());
+			Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow()); //gets Stage information
 			window.setScene(employeeScene);
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -21,111 +21,101 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class LoginController implements Initializable{
+public class LoginController implements Initializable {
 	public LoginModel loginModel = new LoginModel();
-	private Boolean isOn=(Toolkit.getDefaultToolkit().getLockingKeyState(java.awt.event.KeyEvent.VK_CAPS_LOCK)) ? true: false;;
-	
+	private Boolean isOn = (Toolkit.getDefaultToolkit().getLockingKeyState(java.awt.event.KeyEvent.VK_CAPS_LOCK));
+
 	@FXML
 	private Label isConnected;
-	
+
 	@FXML
-	private TextField txtUsername;
-	
+	private TextField txtUsername, txtPassword;
+
 	@FXML
-	private TextField txtPassword; 
-	
-	@FXML 
 	private Button btnLogin;
-	
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		if (loginModel.isDbConnected()) {
 			isConnected.setText("Connected to Database");
 			capsLockState();
-		}
-		else {
+		} else {
 			isConnected.setText("Not connected to Database - contact Administrator");
-		}		
+		}
 	}
-	
-	public void capsLockState () {		
+
+	public void capsLockState() {
 		txtUsername.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
 				if (isOn) {
-					isConnected.setText("Warning - Caps Lock is on");
-			}
-				else if (!isOn) {
+					isConnected.setText("Warning - Caps lock is on");
+				} else if (!isOn) {
 					isConnected.setText("");
 				}
 			}
-			
+
 		});
-	
-	txtUsername.setOnKeyPressed(new EventHandler<KeyEvent>() {
-	    @Override
-	    public void handle(KeyEvent keyEvent) {
-	        if (keyEvent.getCode() == KeyCode.CAPS)  {
-	        	if (isOn) {
-	        		isConnected.setText("");
-	        		isOn = false;
-	        	}
-	        	else if (!isOn) {
-	        	isConnected.setText("Warning - Caps Lock is on");
-	        	isOn = true;
-	        	}
-	        }
-	    }
-	});
-	
-	txtPassword.setOnMouseClicked(new EventHandler<MouseEvent>() {
-		@Override
-		public void handle(MouseEvent event) {
-			if (isOn) {
-				isConnected.setText("Warning - Caps Lock is on");
-		}
-			else if (!isOn) {
-				isConnected.setText("");
+
+		txtUsername.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent keyEvent) {
+				if (keyEvent.getCode() == KeyCode.CAPS) {
+					if (isOn) {
+						isConnected.setText("");
+						isOn = false;
+					} else if (!isOn) {
+						isConnected.setText("Warning - Caps lock is on");
+						isOn = true;
+					}
+				}
 			}
-		}
-		
-	});
-	
-	txtPassword.setOnKeyPressed(new EventHandler<KeyEvent>() {
-	    @Override
-	    public void handle(KeyEvent keyEvent) {
-	        if (keyEvent.getCode() == KeyCode.CAPS)  {
-	        	if (isOn) {
-	        		isConnected.setText("");
-	        		isOn = false;
-	        	}
-	        	else if (!isOn) {
-	        	isConnected.setText("Warning - Caps Lock is on");
-	        	isOn = true;
-	        	}
-	        }
-	    }
-	});
-	
-	btnLogin.setOnKeyPressed(new EventHandler<KeyEvent>() {
-	    @Override
-	    public void handle(KeyEvent keyEvent) {
-	        if (keyEvent.getCode() == KeyCode.CAPS)  {
-	        	if (isOn) {
-	        		isConnected.setText("username and password is not correct");
-	        		isOn = false;
-	        	}
-	        	else if (!isOn) {
-	        	isConnected.setText("username and password is not correct");
-	        	isOn = true;
-	        	}
-	        }
-	    }
-	});
-	
+		});
+
+		txtPassword.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				if (isOn) {
+					isConnected.setText("Warning - Caps lock is on");
+				} else if (!isOn) {
+					isConnected.setText("");
+				}
+			}
+
+		});
+
+		txtPassword.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent keyEvent) {
+				if (keyEvent.getCode() == KeyCode.CAPS) {
+					if (isOn) {
+						isConnected.setText("");
+						isOn = false;
+					} else if (!isOn) {
+						isConnected.setText("Warning - Caps lock is on");
+						isOn = true;
+					}
+				}
+			}
+		});
+
+		btnLogin.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent keyEvent) {
+				if (keyEvent.getCode() == KeyCode.CAPS) {
+					if (isOn) {
+						isConnected.setText("");
+						isOn = false;
+					} else if (!isOn) {
+						isConnected.setText("Warning - Caps lock is on");
+						isOn = true;
+					}
+				}
+			}
+		});
 	}
-	
-	public void Login (ActionEvent event) {
+
+	public void Login(ActionEvent event) {
 		try {
 			if (loginModel.isLogin(txtUsername.getText(), txtPassword.getText())) {
 				if (loginModel.roleLogin(txtUsername.getText(), txtPassword.getText()).equals("employee")) {
@@ -133,13 +123,11 @@ public class LoginController implements Initializable{
 				}
 				if (loginModel.roleLogin(txtUsername.getText(), txtPassword.getText()).equals("customer")) {
 					launchCustomer(event);
-				}
-				else {
+				} else {
 					isConnected.setText("role not detected");
 				}
 
-			}
-			else {
+			} else {
 				isConnected.setText("username and password is not correct");
 			}
 		} catch (SQLException e) {
@@ -154,11 +142,11 @@ public class LoginController implements Initializable{
 		isConnected.setText("username and password is correct");
 		FXMLLoader loader = new FXMLLoader();
 		Pane customerPane = loader.load(getClass().getResource("/application/Customer.fxml").openStream());
-		CustomerController customerController = (CustomerController)loader.getController(); 
+		CustomerController customerController = (CustomerController) loader.getController();
 		customerController.getUser(txtUsername.getText());
 		Scene customerScene = new Scene(customerPane);
-		//This line gets the Stage information
-		Stage window = (Stage)(((Node) event.getSource()).getScene().getWindow());
+		// This line gets the Stage information
+		Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow());
 		window.setScene(customerScene);
 	}
 
@@ -166,11 +154,11 @@ public class LoginController implements Initializable{
 		isConnected.setText("username and password is correct");
 		FXMLLoader loader = new FXMLLoader();
 		Pane employeePane = loader.load(getClass().getResource("/application/Employee.fxml").openStream());
-		EmployeeController employeeController = (EmployeeController)loader.getController(); 
+		EmployeeController employeeController = (EmployeeController) loader.getController();
 		employeeController.getUser(txtUsername.getText());
 		Scene employeeScene = new Scene(employeePane);
-		//This line gets the Stage information
-		Stage window = (Stage)(((Node) event.getSource()).getScene().getWindow());
+		// This line gets the Stage information
+		Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow());
 		window.setScene(employeeScene);
 	}
 

@@ -22,6 +22,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
@@ -29,64 +30,46 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 public class AddMovieController implements Initializable {
-	
+
 	@FXML
-	private TextField txtTitle;
-	
+	private TextField txtTitle, txt1, txt2, txt3, txt4, txtImg;
+
 	@FXML
 	private DatePicker datePicker;
-	
+
 	@FXML
-	private TextField txtImg;
-	
-	@FXML 
 	private TextArea txtDescription;
-	
+
 	@FXML
-	private Button btnCancel;
-	
-	@FXML
-	private Button btnSubmit;
-	
+	private Button btnCancel, btnSubmit;
+
 	@FXML
 	private Label lblMsg;
-	
-	@FXML
-	private TextField txt1;
-	
-	@FXML
-	private TextField txt2;
-	
-	@FXML
-	private TextField txt3;
-	
-	@FXML
-	private TextField txt4;
 
 	private Integer[] arr;
-	
 	private String userName;
+	private final int noSeats = 12;
+	private int startHr, startMin, endHr, endMin;
 
 	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {		
+	public void initialize(URL arg0, ResourceBundle arg1) {
 		configureDatePicker();
 		timeControl();
 	}
-	
-	public void getUser (String user) {
+
+	public void getUser(String user) {
 		userName = user;
 	}
 
 	private void configureDatePicker() {
 		final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
-
 			@Override
 			public DateCell call(final DatePicker datePicker) {
 				return new DateCell() {
 					@Override
 					public void updateItem(LocalDate item, boolean empty) {
 						super.updateItem(item, empty);
-						
+
 						if (item.isBefore(LocalDate.now().plusDays(1))) {
 							setDisable(true);
 							setStyle("-fx-background-color : #ffc0cb;");
@@ -98,90 +81,57 @@ public class AddMovieController implements Initializable {
 		datePicker.setDayCellFactory(dayCellFactory);
 		datePicker.setValue(LocalDate.now().plusDays(1));
 	}
-	
-	public void timeControl() {
+
+	//TODO: issue when backspace is pressed - fixed?
+	public void timeControl() { 
 		final int maxLength = 2;
-		txt1.textProperty().addListener(new ChangeListener<String>() {
-			@Override
-		    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-		            if (!newValue.matches("\\d{0,9}")) {
-		                txt1.setText(oldValue);
-		            }		            
-		            if (txt1.getText().length() == maxLength) {
-		            	txt2.requestFocus();
-		            }
-		            if (txt1.getText().length() > maxLength) {
-		            	String s = txt1.getText().substring(0, maxLength);
-		            	txt1.setText(s);
-		            }
-			}
-		});
-		
-		txt2.textProperty().addListener(new ChangeListener<String>() {
-			@Override
-		    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-		            if (!newValue.matches("\\d{0,9}")) {
-		                txt2.setText(oldValue);
-		            }
-		            if (txt2.getText().length() == maxLength) {
-		            	txt3.requestFocus();
-		            }
-		            if (txt2.getText().length() > maxLength) {
-		            	String s = txt2.getText().substring(0, maxLength);
-		            	txt2.setText(s);
-		            }
-			}
-		});
-		
-		txt3.textProperty().addListener(new ChangeListener<String>() {
-			@Override
-		    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-		            if (!newValue.matches("\\d{0,9}")) {
-		                txt3.setText(oldValue);
-		            }
-		            if (txt3.getText().length() == maxLength) {
-		            	txt4.requestFocus();
-		            }
-		            if (txt3.getText().length() > maxLength) {
-		            	String s = txt3.getText().substring(0, maxLength);
-		            	txt3.setText(s);
-		            }
-			}
-		});
-		
-		txt4.textProperty().addListener(new ChangeListener<String>() {
-			@Override
-		    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-		            if (!newValue.matches("\\d{0,9}")) {
-		                txt4.setText(oldValue);
-		            }
-		            if (txt4.getText().length() == maxLength) {
-		            	txtImg.requestFocus();
-		            }
-		            if (txt4.getText().length() > maxLength) {
-		            	String s = txt4.getText().substring(0, maxLength);
-		            	txt4.setText(s);
-		            }
-			}
-		});
+		for (TextField b : Arrays.asList(txt1, txt2, txt3, txt4)) {
+
+			b.textProperty().addListener(new ChangeListener<String>() {
+				@Override
+				public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+					if (!newValue.matches("\\d{0,9}")) {
+						b.setText(oldValue);
+					}
+					if (b.getText().length() > maxLength) {
+						String s = b.getText().substring(0, maxLength);
+						b.setText(s);
+					}
+					
+					if (txt1.getText().length() == maxLength) {
+						txt2.requestFocus();
+						if (txt2.getText().length() == maxLength) {
+							txt3.requestFocus();
+							if (txt3.getText().length() == maxLength) {
+								txt4.requestFocus();
+								if (txt4.getText().length() == maxLength) {
+									txtImg.requestFocus();
+								}
+							}
+						}
+					}
+				}
+			});
+			
+		}
 	}
-	
+
 	public void Submit(ActionEvent event) throws SQLException {
 		if (fieldsValid()) {
-			lblMsg.setText("valid entries");
-			AddMovieModel.insertMovie(txtTitle.getText(), datePicker.getValue().toString(), formTime(), txtImg.getText(), txtDescription.getText(), 12);
+			lblMsg.setText("Movie added!");
+			AddMovieModel.insertMovie(txtTitle.getText(), datePicker.getValue().toString(), timeString(),
+					txtImg.getText(), txtDescription.getText(), noSeats);
+		}
 	}
-	}
-	
+
 	public void Cancel(ActionEvent event) {
 		FXMLLoader loader = new FXMLLoader();
 		try {
 			Pane EmployeePane = loader.load(getClass().getResource("/application/Employee.fxml").openStream());
 			Scene EmployeeScene = new Scene(EmployeePane);
-			//This line gets the Stage information
-			EmployeeController employeeController = (EmployeeController)loader.getController(); 
+			EmployeeController employeeController = (EmployeeController) loader.getController();
 			employeeController.getUser(userName);
-			Stage window = (Stage)(((Node) event.getSource()).getScene().getWindow());
+			Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow());
 			window.setScene(EmployeeScene);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -189,149 +139,161 @@ public class AddMovieController implements Initializable {
 	}
 
 	private boolean fieldsValid() {
-		if(txtTitle.getText().isEmpty()) {
+		if (txtTitle.getText().isEmpty()) {
 			txtTitle.requestFocus();
 			txtTitle.setStyle("-fx-background-color: pink;");
-			lblMsg.setText("Enter the Film title!");
-			
+			lblMsg.setText("Enter a Movie title");
+
 			txtTitle.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			    @Override
-			    public void handle(KeyEvent keyEvent) {
-			    	Boolean alphanumeric = txtTitle.getText().matches("[0-9A-Za-z]");
-			    	 if(alphanumeric) {
-			    		 txtTitle.setStyle(null);
-			    		 lblMsg.setText("");
-			    	 }
-			    }
-			    });
+				@Override
+				public void handle(KeyEvent keyEvent) {
+					Boolean isAlphanumeric = txtTitle.getText().matches("[0-9A-Za-z]");
+					if (isAlphanumeric) {
+						txtTitle.setStyle(null);
+						lblMsg.setText("");
+					}
+				}
+			});
 			return false;
 		}
 
-		else if(datePicker.getValue() == null | !validateDate(datePicker.getValue())) {
+		else if (datePicker.getValue() == null | !validateDate(datePicker.getValue())) {
 			datePicker.setValue(LocalDate.now().plusDays(1));
 			datePicker.requestFocus();
 			lblMsg.setText("Enter a valid date dd/mm/yy");
 			return false;
 		}
-		
-		else if (!validateTime(formTime())) {
-			txt1.setText("");
-			txt1.setStyle("-fx-background-color: pink;");
-			txt1.requestFocus();
-			txt2.setText("");
-			txt2.setStyle("-fx-background-color: pink;");
-			txt3.setText("");
-			txt3.setStyle("-fx-background-color: pink;");
-			txt4.setText("");
-			txt4.setStyle("-fx-background-color: pink;");
-			//lblMsg.setText("Enter a valid time xx:xx-xx:xx");
+
+		else if (!validateTime(timeString())) {
 			
-			txt1.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			    @Override
-			    public void handle(KeyEvent keyEvent) {
-		    		 txt1.setStyle(null);
-		    		 txt2.setStyle(null);
-		    		 txt3.setStyle(null);
-		    		 txt4.setStyle(null);
-		    		 lblMsg.setText("");
-			    }
-			    });
-			
-			txt2.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			    @Override
-			    public void handle(KeyEvent keyEvent) {
-		    		 txt1.setStyle(null);
-		    		 txt2.setStyle(null);
-		    		 txt3.setStyle(null);
-		    		 txt4.setStyle(null);
-		    		 lblMsg.setText("");
-			    }
-			    });
-			
-			txt3.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			    @Override
-			    public void handle(KeyEvent keyEvent) {
-		    		 txt1.setStyle(null);
-		    		 txt2.setStyle(null);
-		    		 txt3.setStyle(null);
-		    		 txt4.setStyle(null);
-		    		 lblMsg.setText("");
-			    }
-			    });
-			
-			txt4.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			    @Override
-			    public void handle(KeyEvent keyEvent) {
-		    		 txt1.setStyle(null);
-		    		 txt2.setStyle(null);
-		    		 txt3.setStyle(null);
-		    		 txt4.setStyle(null);
-		    		 lblMsg.setText("");
-			    }
-			    });
-			
+			for (TextField b : Arrays.asList(txt1, txt2, txt3, txt4)) {
+				b.setText("");
+				b.setStyle("-fx-background-color: pink;");
+				txt1.requestFocus();
+				
+				b.setOnKeyPressed(new EventHandler<KeyEvent>() {
+					@Override
+					public void handle(KeyEvent keyEvent) {
+					txt1.setStyle(null);
+					txt2.setStyle(null);
+					txt3.setStyle(null);
+					txt4.setStyle(null);
+					lblMsg.setText("");
+					}
+				});
+			}
 			return false;
 		}
-		
-		else if(txtImg.getText().isEmpty()) {
+
+		else if (txtImg.getText().isEmpty()) {
 			txtImg.requestFocus();
 			txtImg.setStyle("-fx-background-color: pink;");
 			lblMsg.setText("Enter an image URL!");
-			
+
 			txtImg.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			    @Override
-			    public void handle(KeyEvent keyEvent) {
-			    	Boolean alphanumeric = txtImg.getText().matches("[0-9A-Za-z]");
-			    	 if(alphanumeric) {
-			    		 txtImg.setStyle(null);
-			    		 lblMsg.setText("");
-			    	 }
-			    }
-			    });
+				@Override
+				public void handle(KeyEvent keyEvent) {
+					Boolean isAlphanumeric = txtImg.getText().matches("[0-9A-Za-z]");
+					if (isAlphanumeric) {
+						txtImg.setStyle(null);
+						lblMsg.setText("");
+					}
+				}
+			});
 			return false;
 		}
-				
-		else if(txtDescription.getText().isEmpty()) {
+
+		else if (txtDescription.getText().isEmpty()) {
 			txtDescription.requestFocus();
 			Region region = (Region) txtDescription.lookup(".content");
 			region.setStyle("-fx-background-color: pink;");
-			lblMsg.setText("Enter a Film description!");
-			
+			lblMsg.setText("Enter the Movie's description");
+
 			txtDescription.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			    @Override
-			    public void handle(KeyEvent keyEvent) {
-			    	Boolean alphanumeric = txtDescription.getText().matches("[0-9A-Za-z]");
-			    	 if(alphanumeric) {
-			    		 region.setStyle(null);
-			    		 lblMsg.setText("");
-			    	 }
-			    }
-			    });
+				@Override
+				public void handle(KeyEvent keyEvent) {
+					Boolean alphanumeric = txtDescription.getText().matches("[0-9A-Za-z]");
+					if (alphanumeric) {
+						region.setStyle(null);
+						lblMsg.setText("");
+					}
+				}
+			});
 			return false;
 		}
-		
 		else {
 			return true;
 		}
 	}
-	
-	private String formTime() {
+
+	private String timeString() {
 		return txt1.getText() + ":" + txt2.getText() + "-" + txt3.getText() + ":" + txt4.getText();
 	}
 
 	private boolean validateTime(String time) {
-		if(timeLegal(time)) {
-			if (startTimeOK()) {
-				if(timeNoClash()) {
-					return true;
-				}
-				else {
-					return false;
-				}
+		try {
+			getTimeInts();
+			if(timeLegal(time) & startTimeOK() & timeNoClash()) {
+				return true;
 			}
-			else {
+			else return false;		
+		} catch (Exception e) { //in the event that no time is entered, a StringIndexOutOfBoundsException occurs
+			System.out.print(e);
+			lblMsg.setText("Enter a time");
+			return false;
+		}
+	}
+
+	private boolean startTimeOK() {
+		if (startHr < endHr) {
+			return true;
+		}
+		
+		else if (startHr == endHr) {
+			if (startMin < endMin) {
+				return true;
+			} else {
+				lblMsg.setText("Start time cannot be after End time!");
 				return false;
 			}
+		}
+
+		else {
+			lblMsg.setText("Start time cannot be after End time!");
+			return false;
+		}
+	}
+	
+	private void getTimeInts() {
+		if (Integer.valueOf(txt1.getText().charAt(0)) == 0) {
+			startHr = Integer.valueOf(txt1.getText().charAt(1));
+		} else {
+			startHr = Integer.valueOf(txt1.getText());
+		}
+
+		if (Integer.valueOf(txt2.getText().charAt(0)) == 0) {
+			startMin = Integer.valueOf(txt2.getText().charAt(1));
+		} else {
+			startMin = Integer.valueOf(txt2.getText());
+		}
+
+		if (Integer.valueOf(txt3.getText().charAt(0)) == 0) {
+			endHr = Integer.valueOf(txt3.getText().charAt(1));
+		} else {
+			endHr = Integer.valueOf(txt3.getText());
+		}
+
+		if (Integer.valueOf(txt4.getText().charAt(0)) == 0) {
+			endMin = Integer.valueOf(txt4.getText().charAt(1));
+		} else {
+			endMin = Integer.valueOf(txt4.getText());
+		}		
+	}
+
+	private boolean timeLegal(String time) {
+		String regex = "(([01][0-9]|2[0-3]):[0-5][0-9])-(([01][0-9]|2[0-3]):[0-5][0-9])";
+		if (time.matches(regex)) {
+			return true;
 		}
 		else {
 			lblMsg.setText("Illegal time!");
@@ -339,167 +301,71 @@ public class AddMovieController implements Initializable {
 		}
 	}
 
-	private boolean startTimeOK() {
-		int startHr, startMin, endHr, endMin;
-		if (Integer.valueOf(txt1.getText().charAt(0)) == 0) {
-			startHr = Integer.valueOf(txt1.getText().charAt(1));
-		}
-		else {
-			startHr = Integer.valueOf(txt1.getText());
-		}
-		
-		if (Integer.valueOf(txt2.getText().charAt(0)) == 0) {
-			startMin = Integer.valueOf(txt2.getText().charAt(1));
-		}
-		else {
-			startMin = Integer.valueOf(txt2.getText());
-		}
-		
-		if (Integer.valueOf(txt3.getText().charAt(0)) == 0) {
-			endHr = Integer.valueOf(txt3.getText().charAt(1));
-		}
-		else {
-			endHr = Integer.valueOf(txt3.getText());
-		}
-		
-		if (Integer.valueOf(txt4.getText().charAt(0)) == 0) {
-			endMin = Integer.valueOf(txt4.getText().charAt(1));
-		}
-		else {
-			endMin  = Integer.valueOf(txt4.getText());
-		}
-		
-		if (startHr < endHr) {
-			return true;
-		}
-		else if (startHr == endHr) {
-			if(startMin < endMin) {
-				return true;
-			}
-			else {
-				lblMsg.setText("Start time cannot be after End time!");
-				return false;
-			}
-		}
-		
-		else {
-			lblMsg.setText("Start time cannot be after End time!");
-			return false;
-		}
-	}
-	
-	private boolean timeLegal(String time) {
-		String regex = "(([01][0-9]|2[0-3]):[0-5][0-9])-(([01][0-9]|2[0-3]):[0-5][0-9])";
-		return time.matches(regex);
-	}
-	
-	private boolean timeNoClash() {
-		int startHr, startMin, endHr, endMin;
-		if (Integer.valueOf(txt1.getText().charAt(0)) == 0) {
-			startHr = Integer.valueOf(txt1.getText().charAt(1));
-		}
-		else {
-			startHr = Integer.valueOf(txt1.getText());
-		}
-		
-		if (Integer.valueOf(txt2.getText().charAt(0)) == 0) {
-			startMin = Integer.valueOf(txt2.getText().charAt(1));
-		}
-		else {
-			startMin = Integer.valueOf(txt2.getText());
-		}
-		
-		if (Integer.valueOf(txt3.getText().charAt(0)) == 0) {
-			endHr = Integer.valueOf(txt3.getText().charAt(1));
-		}
-		else {
-			endHr = Integer.valueOf(txt3.getText());
-		}
-		
-		if (Integer.valueOf(txt4.getText().charAt(0)) == 0) {
-			endMin = Integer.valueOf(txt4.getText().charAt(1));
-		}
-		else {
-			endMin = Integer.valueOf(txt4.getText());
-		}
-		
-		int i=0;
+	private boolean timeNoClash() { //TODO: is getTimeInts needed?
+		int i = 0;
 		int timesSize = 0;
-		
 		try {
 			ArrayList<Integer[]> times = AddMovieModel.checkMovies(datePicker.getValue().toString());
 			timesSize = times.size();
-			for (; i < times.size(); i++) { 
-				System.out.print(i);
+			for (; i < times.size(); i++) {
+				System.out.print(i); //TODO: delete when done testing
 				arr = times.get(i);
 				int existingStartHr = arr[0];
 				int existingStartMin = arr[1];
 				int existingEndHr = arr[2];
 				int existingEndMin = arr[3];
-				
+
 				if (endHr < existingStartHr) {
 					continue;
 				}
-				
+
 				if (endHr == existingStartHr) {
 					if (endMin < existingStartMin) {
 						continue;
-					}
-					else {
+					} else {
 						break;
 					}
 				}
-				
+
 				if (startHr > existingEndHr) {
 					continue;
 				}
-				
+
 				if (startHr == existingEndHr) {
 					if (startMin > existingEndMin) {
 						continue;
-					}
-					else {
+					} else {
 						break;
 					}
-				}		
+				}
 			}
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			
-		}
+		} 
 		if (i == timesSize) {
 			return true;
-		}
-		else {
-//			for (int j = 0; j < arr.length; j++) {
-//				String parts[j] = String.valueOf(arr[j]); 
-//			}
-			
-			String[] a = Arrays.toString(arr).split("[\\[\\]]")[1].split(", "); 
-			
+		} else {
+			String[] a = Arrays.toString(arr).split("[\\[\\]]")[1].split(", ");
+
 			for (int j = 0; j < a.length; j++) {
 				if (a[j].length() == 1) {
 					a[j] = "0" + a[j];
 				}
 			}
 			String clashTime = a[0] + ":" + a[1] + "-" + a[2] + ":" + a[3];
-			
 			lblMsg.setText("There is already a movie showing from " + clashTime + ".");
 			return false;
 		}
 	}
-	
+
 	private boolean validateDate(LocalDate localDate) {
 		try {
 			if (localDate.isBefore(LocalDate.now())) {
-				return false;			
-			}
-			else {
+				return false;
+			} else {
 				return true;
 			}
-		} catch(NullPointerException ne) {
+		} catch (NullPointerException ne) {
 			return false;
 		}
 	}
