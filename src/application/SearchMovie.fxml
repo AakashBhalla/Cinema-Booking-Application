@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400" prefWidth="500" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SearchMovieController">
+   <children>
+      <Label layoutX="87.0" layoutY="68.0" text="Movie Title: " />
+      <Label layoutX="88.0" layoutY="98.0" text="Date:" />
+      <TextField fx:id="txtTitle" layoutX="176.0" layoutY="64.0" />
+      <DatePicker fx:id="datePicker" layoutX="176.0" layoutY="94.0" />
+      <Button fx:id="btnCancel" layoutX="126.0" layoutY="339.0" mnemonicParsing="false" onAction="#Cancel" text="Back" />
+      <Label fx:id="labelResult" layoutY="270.0" prefHeight="17.0" prefWidth="500.0" />
+      <Button fx:id="btnSearch" layoutX="299.0" layoutY="339.0" mnemonicParsing="false" onAction="#searchMovie" text="Search" />
+      <TableView fx:id="tableResults" layoutX="36.0" layoutY="231.0" prefHeight="108.0" prefWidth="441.0">
+        <columns>
+          <TableColumn prefWidth="75.0" text="Title" />
+          <TableColumn prefWidth="75.0" text="Date" />
+          <TableColumn prefWidth="75.0" text="Time" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

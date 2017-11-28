@@ -20,7 +20,7 @@ public class EmployeeController implements Initializable {
 	private Label welcomeLbl;
 
 	@FXML
-	private Button btnLogout, btnAdd;
+	private Button btnLogout, btnAdd, btnSearch;
 
 	private String userName;
 
@@ -55,6 +55,20 @@ public class EmployeeController implements Initializable {
 			addMovieController.getUser(userName);
 			Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow());
 			window.setScene(AddMovieScene);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void SearchMovie(ActionEvent event) {
+		FXMLLoader loader = new FXMLLoader();
+		try {
+			Pane SearchMoviePane = loader.load(getClass().getResource("/application/SearchMovie.fxml").openStream());
+			Scene SearchMovieScene = new Scene(SearchMoviePane);
+			SearchMovieController searchMovieController = (SearchMovieController) loader.getController();
+			searchMovieController.getUser(userName);
+			Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow());
+			window.setScene(SearchMovieScene);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

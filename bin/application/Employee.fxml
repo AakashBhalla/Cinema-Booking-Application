@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400" prefWidth="500" xmlns="http://javafx.com/javafx/8.0.41" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.EmployeeController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400" prefWidth="500" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.EmployeeController">
    <top>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
@@ -15,7 +15,8 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <Button fx:id="btnAdd" layoutX="268.0" layoutY="161.0" mnemonicParsing="false" onAction="#AddMovie" text="Add Movie" />
+            <Button fx:id="btnAdd" layoutX="268.0" layoutY="106.0" mnemonicParsing="false" onAction="#AddMovie" text="Add Movie" />
+            <Button fx:id="btnSearch" layoutX="261.0" layoutY="153.0" mnemonicParsing="false" onAction="#SearchMovie" text="Search Movie" />
          </children>
       </AnchorPane>
    </top>
