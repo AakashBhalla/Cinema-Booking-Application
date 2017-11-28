@@ -104,7 +104,7 @@ public class SearchMovieController implements Initializable {
 		for (int i = 0; i < results.size(); i++) {
 			System.out.println(Arrays.toString(results.get(i)));
 		}
-		//tableResults.rowFactoryProperty();
+		
 	}
 	
 	private void configureTableView() {
