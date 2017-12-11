@@ -17,12 +17,15 @@
       <Button fx:id="btnCancel" layoutX="126.0" layoutY="339.0" mnemonicParsing="false" onAction="#Cancel" text="Back" />
       <Label fx:id="labelResult" layoutY="270.0" prefHeight="17.0" prefWidth="500.0" />
       <Button fx:id="btnSearch" layoutX="299.0" layoutY="339.0" mnemonicParsing="false" onAction="#searchMovie" text="Search" />
-      <TableView fx:id="tableResults" layoutX="36.0" layoutY="231.0" prefHeight="108.0" prefWidth="441.0">
+      <TableView fx:id="tableResults" layoutX="1.0" layoutY="194.0" prefHeight="123.0" prefWidth="500.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="Title" />
-          <TableColumn prefWidth="75.0" text="Date" />
-          <TableColumn prefWidth="75.0" text="Time" />
+          <TableColumn fx:id="title" prefWidth="95.0" text="Title" />
+          <TableColumn fx:id="date" prefWidth="75.0" text="Date" />
+          <TableColumn fx:id="time" prefWidth="75.0" text="Time" />
+          <TableColumn fx:id="bSeats" prefWidth="85.0" text="Booked Seats" />
+          <TableColumn fx:id="aSeats" prefWidth="91.0" text="Available Seats" />
         </columns>
       </TableView>
+      <Button fx:id="btnExport" layoutX="211.0" layoutY="339.0" mnemonicParsing="false" onAction="#exportFile" text="Export" />
    </children>
 </AnchorPane>

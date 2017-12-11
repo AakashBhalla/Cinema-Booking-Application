@@ -56,10 +56,10 @@ public class SearchMovieModel {
 			ArrayList<String[]> results= new ArrayList<String[]>();
 			
 			while(resultSet.next()) {
-				String[] arr = new String[3];
-				for (int columnNo =1 ; columnNo <=3; columnNo++){
-					arr[columnNo-1] = resultSet.getString(columnNo);
-					if (columnNo == 3) {
+				String[] arr = new String[7];
+				for (int i =1 ; i <= 7; i++){
+					arr[i-1] = resultSet.getString(i);
+					if (i == 7) {
 						results.add(arr);
 					}
 				}	

@@ -26,6 +26,21 @@ public class AddMovieModel {
 			pstm.close();
 		}
 	}
+	
+	public static void insertScreen() throws SQLException {
+		PreparedStatement pstm = null;
+		String sql = "INSERT INTO screen(A1, A2, A3, A4, B1, B2, B3, B4, C1, C2, C3, C4) VALUES ('N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N')";
+		try {
+			Connection connection = SQLiteConnection.Connector();
+			pstm = connection.prepareStatement(sql);
+			pstm.executeUpdate();
+			
+		} catch (Exception e) {
+			System.out.print(e);
+		} finally {
+			pstm.close();
+		}
+	}
 
 	public static ArrayList<Integer[]> checkMovies(String date) throws SQLException {
 		PreparedStatement pstm = null;

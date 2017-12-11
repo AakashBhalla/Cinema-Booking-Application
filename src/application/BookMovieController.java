@@ -1,15 +1,12 @@
 package application;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.ResourceBundle;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,20 +28,16 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-public class SearchMovieController implements Initializable {
-
+public class BookMovieController implements Initializable {
 	@FXML
-	private Button btnCancel, btnExport;
-
+	private Button btnBack;
+	
 	@FXML
 	private TextField txtTitle;
-
+	
 	@FXML
 	private DatePicker datePicker;
-
-	@FXML
-	private Label labelResult;
-
+	
 	@FXML
 	private TableView<Movie> tableResults;
 
@@ -65,34 +58,33 @@ public class SearchMovieController implements Initializable {
 	private ArrayList<String[]> results;
 
 	public ObservableList<Movie> data = FXCollections.observableArrayList();
-	
-	private String fileName;
-
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		configureDatePicker();
-		configureTableView();
-		btnExport.setVisible(false); //export is only visible once a search has been made
-	}
 
 	public void getUser(String user) {
 		userName = user;
 	}
 
-	public void Cancel(ActionEvent event) {
+	public void Back(ActionEvent event) {
 		FXMLLoader loader = new FXMLLoader();
+		Pane customerPane;
 		try {
-			Pane EmployeePane = loader.load(getClass().getResource("/application/Employee.fxml").openStream());
-			Scene EmployeeScene = new Scene(EmployeePane);
-			EmployeeController employeeController = (EmployeeController) loader.getController();
-			employeeController.getUser(userName);
+			customerPane = loader.load(getClass().getResource("/application/Customer.fxml").openStream());
+			CustomerController customerController = (CustomerController) loader.getController();
+			customerController.getUser(userName);
+			Scene customerScene = new Scene(customerPane);
+			// This line gets the Stage information
 			Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow());
-			window.setScene(EmployeeScene);
+			window.setScene(customerScene);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		configureDatePicker();
+		configureTableView();
+	}
+	
 	private void configureDatePicker() {
 		final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
 			@Override
@@ -113,33 +105,7 @@ public class SearchMovieController implements Initializable {
 		datePicker.setDayCellFactory(dayCellFactory);
 		datePicker.setValue(LocalDate.now().plusDays(1));
 	}
-
-	public void searchMovie() throws SQLException {
-		tableResults.getItems().clear(); //clears table view whenever a new search is made
-		String date = null;
-		try {
-			date = datePicker.getValue().toString();
-		} catch (Exception e) {
-			date = ""; //catches NullPointerException if date picker is empty
-			System.out.println(e);
-		} finally {
-			results = SearchMovieModel.searchMovie(txtTitle.getText(), date); //searches the database based on two parameters
-		}
-
-		tableResults.setVisible(true); 
-		btnExport.setVisible(true); //table view and export button visible after search
-		if (results.isEmpty()) {
-			tableResults.setPlaceholder(new Label("No movies showing on that day!"));
-		}
-
-		for (int i = 0; i < results.size(); i++) {
-			String[] arr = results.get(i);
-			Movie name = new Movie(arr[1], arr[2], arr[3], 12 - Integer.valueOf(arr[6]), Integer.valueOf(arr[6]));
-			data.add(name);
-		}
-		tableResults.setItems(data);
-	}
-
+	
 	private void configureTableView() {
 		TableColumn viewCol = new TableColumn("View");	
 		tableResults.getColumns().add(viewCol); //adds new column which will contain Buttons
@@ -160,7 +126,7 @@ public class SearchMovieController implements Initializable {
 					public TableCell call(final TableColumn<Movie, String> param) {
 						final TableCell<Movie, String> cell = new TableCell<Movie, String>() {
 
-							final Button btn = new Button("View");
+							final Button btn = new Button("Book");
 
 							@Override
 							public void updateItem(String item, boolean empty) {
@@ -194,52 +160,30 @@ public class SearchMovieController implements Initializable {
 
 		viewCol.setCellFactory(cellFactory);
 	}
-
-	/**
-	 * Creates a new text file named by the local date and time in the
-	 * ExportFiles folder and adds the information that is present in the table,
-	 * including title, date, time, and number of booked and available seats.
-	 */
-	public void exportFile() {
-		
+	
+	public void searchMovie() throws SQLException {
+		tableResults.getItems().clear(); //clears table view whenever a new search is made
+		String date = null;
 		try {
-			fileName = "";
-			
-			if (txtTitle.getText().isEmpty()) {
-				fileName = "Showings on " + datePicker.getValue().toString();
-			}
-			
-			else if (!txtTitle.getText().isEmpty() && !datePicker.getValue().toString().isEmpty()) {
-				fileName = txtTitle.getText() + " showings on " + datePicker.getValue().toString();
-			}
-		} catch (Exception e1) {
-			fileName = txtTitle.getText() + " showings";
-			e1.printStackTrace();
+			date = datePicker.getValue().toString();
+		} catch (Exception e) {
+			date = ""; //catches NullPointerException if date picker is empty
+			System.out.println(e);
+		} finally {
+			results = SearchMovieModel.searchMovie(txtTitle.getText(), date); //searches the database based on two parameters
 		}
-		System.out.print(LocalDateTime.now().toString()); //delet this
-		try {
-//			File file = new File(
-//					"ExportFiles/" + LocalDateTime.now().toString().replaceAll("/", ".").replaceAll(":", ".") + ".txt");
-			File file = new File ("ExportFiles/" + fileName + ".txt");
-			file.getParentFile().mkdirs();
-			if (!file.exists()) {
-				file.createNewFile();
-			}
 
-			PrintWriter pw = new PrintWriter(file);
-			
-			if (results.size() == 0) {
-				pw.println("No results");
-			}
-			
-			for (int i = 0; i < results.size(); i++) {
-				String[] arr = results.get(i);
-				pw.println(Arrays.toString(arr).replace("[", "").replace("]", ""));
-			}
-			pw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		tableResults.setVisible(true); 
+		if (results.isEmpty()) {
+			tableResults.setPlaceholder(new Label("No movies showing on that day!"));
 		}
+
+		for (int i = 0; i < results.size(); i++) {
+			String[] arr = results.get(i);
+			Movie name = new Movie(arr[1], arr[2], arr[3], 12 - Integer.valueOf(arr[6]), Integer.valueOf(arr[6]));
+			data.add(name);
+		}
+		tableResults.setItems(data);
 	}
 	
 	private void launchScreen(ActionEvent event, String[] movieArr) throws IOException {
@@ -254,4 +198,5 @@ public class SearchMovieController implements Initializable {
 		Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow());
 		window.setScene(screenScene);
 	}
+
 }

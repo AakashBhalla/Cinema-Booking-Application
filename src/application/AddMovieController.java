@@ -22,6 +22,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
@@ -120,6 +121,14 @@ public class AddMovieController implements Initializable {
 			lblMsg.setText("Movie added!");
 			AddMovieModel.insertMovie(txtTitle.getText(), datePicker.getValue().toString(), timeString(),
 					txtImg.getText(), txtDescription.getText(), noSeats);
+			AddMovieModel.insertScreen();
+			
+			//empty all input fields if movie is successfully added
+			for (TextField b : Arrays.asList(txtTitle, txt1, txt2, txt3, txt4, txtImg)) {
+				b.setText("");
+			}
+			datePicker.setValue(LocalDate.now().plusDays(1));
+			txtDescription.setText("");
 		}
 	}
 
@@ -138,6 +147,8 @@ public class AddMovieController implements Initializable {
 	}
 
 	private boolean fieldsValid() {
+		txtImg.setStyle(null); //sets the style to null (needed in the event that the user copies and pastes a link into the pink text field)
+		
 		if (txtTitle.getText().isEmpty()) {
 			txtTitle.requestFocus();
 			txtTitle.setStyle("-fx-background-color: pink;");
@@ -184,7 +195,7 @@ public class AddMovieController implements Initializable {
 			return false;
 		}
 
-		else if (txtImg.getText().isEmpty()) {
+		else if (txtImg.getText().isEmpty() || !isImage(txtImg.getText())) {
 			txtImg.requestFocus();
 			txtImg.setStyle("-fx-background-color: pink;");
 			lblMsg.setText("Enter an image URL!");
@@ -222,6 +233,25 @@ public class AddMovieController implements Initializable {
 		}
 		else {
 			return true;
+		}
+	}
+
+	private boolean isImage(String imageURL) {
+//		if (!imageURL.matches("(http(s?):/)(/[^/]+)+" + ".(?:jpg|png)")) {
+//			return false;
+//		}
+		try {
+			Image image = new Image(imageURL);
+			if(image.getWidth() == -1) {
+				return false;
+			}
+			else {
+				return true;
+			}
+			
+		} catch (Exception e) {
+			System.out.print(e);
+			return false;
 		}
 	}
 
@@ -309,6 +339,7 @@ public class AddMovieController implements Initializable {
 			for (; i < times.size(); i++) {
 				System.out.print(i); //TODO: delete when done testing
 				arr = times.get(i);
+				System.out.print(Arrays.toString(arr));
 				int existingStartHr = arr[0];
 				int existingStartMin = arr[1];
 				int existingEndHr = arr[2];
@@ -325,6 +356,29 @@ public class AddMovieController implements Initializable {
 						break;
 					}
 				}
+				
+				if (endHr == existingEndHr) {
+					if (endMin <= existingEndMin) {
+						break;
+					}
+				}
+				
+				if (startHr < existingStartHr) {
+					if (endHr < existingStartHr) {
+						continue;
+					}
+					else if (endHr == existingStartHr) {
+						if (endMin < existingStartMin) {
+							continue;
+						}
+						else {
+							break;
+						}
+					}
+					else if (endHr > existingStartHr) {
+						break;
+					}
+				}
 
 				if (startHr > existingEndHr) {
 					continue;
@@ -337,10 +391,27 @@ public class AddMovieController implements Initializable {
 						break;
 					}
 				}
+				
+				if (startHr == existingStartHr) {
+					if(startMin < existingStartMin) {
+						if (endMin < existingStartMin) {
+							continue;
+						}
+						else {
+							break;
+						}
+					}
+					
+					
+					if (startMin >= existingStartMin) {
+						break;
+					}
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} 
+		System.out.print(i);
 		if (i == timesSize) {
 			return true;
 		} else {

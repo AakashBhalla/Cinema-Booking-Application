@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400" prefWidth="500" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ScreenController">
+   <children>
+      <TabPane layoutX="6.0" prefHeight="400.0" prefWidth="494.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Information">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="23.0" layoutY="23.0" text="Title:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="txtTitle" layoutX="68.0" layoutY="24.0" prefHeight="17.0" prefWidth="407.0" text="title">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="23.0" layoutY="52.0" text="Date: ">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="txtDate" layoutX="71.0" layoutY="53.0" prefHeight="17.0" prefWidth="406.0" text="date">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="23.0" layoutY="85.0" text="Time: ">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="txtTime" layoutX="72.0" layoutY="85.0" prefHeight="17.0" prefWidth="389.0" text="time">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <ImageView fx:id="img" fitHeight="316.0" fitWidth="219.0" layoutX="247.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true" />
+                        <Label layoutX="23.0" layoutY="122.0" text="Booked Seats: ">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="22.0" layoutY="160.0" prefHeight="27.0" prefWidth="127.0" text="Available Seats:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="txtbSeats" layoutX="140.0" layoutY="122.0" prefHeight="27.0" prefWidth="274.0" text="number">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="txtaSeats" layoutX="151.0" layoutY="160.0" prefHeight="27.0" prefWidth="237.0" text="number">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Button layoutX="97.0" layoutY="311.0" mnemonicParsing="false" onAction="#back" text="Back" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Screen">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="404.0" prefWidth="494.0">
+                     <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" height="375.0" layoutX="1.0" stroke="BLACK" strokeType="INSIDE" width="494.0" />
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#7e7f80" height="31.0" layoutX="20.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" width="451.0" />
+                        <Label alignment="CENTER" layoutX="21.0" layoutY="13.0" prefHeight="17.0" prefWidth="449.0" text="SCREEN">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="a1" layoutX="81.0" layoutY="80.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="52.0" text="1">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Button>
+                        <Label alignment="CENTER" layoutX="30.0" layoutY="90.0" text="A" textFill="#fffbfb">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="a2" layoutX="184.0" layoutY="80.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="52.0" text="2">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="a3" layoutX="251.0" layoutY="80.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="52.0" text="3">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="a4" layoutX="355.0" layoutY="80.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="52.0" text="4">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Button>
+                        <Label alignment="CENTER" layoutX="445.0" layoutY="92.0" text="A" textFill="#fffbfb">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="b1" layoutX="81.0" layoutY="166.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="52.0" text="1">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Button>
+                        <Label alignment="CENTER" layoutX="30.0" layoutY="176.0" text="B" textFill="#fffbfb">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="b2" layoutX="184.0" layoutY="166.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="52.0" text="2">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="b3" layoutX="251.0" layoutY="166.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="52.0" text="3">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="b4" layoutX="355.0" layoutY="166.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="52.0" text="4">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Button>
+                        <Label alignment="CENTER" layoutX="445.0" layoutY="178.0" text="B" textFill="#fffbfb">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="c1" layoutX="81.0" layoutY="250.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="52.0" text="1">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Button>
+                        <Label alignment="CENTER" layoutX="30.0" layoutY="260.0" text="C" textFill="#fffbfb">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="c2" layoutX="184.0" layoutY="250.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="52.0" text="2">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="c3" layoutX="251.0" layoutY="250.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="52.0" text="3">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="c4" layoutX="355.0" layoutY="250.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="52.0" text="4">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Button>
+                        <Label alignment="CENTER" layoutX="445.0" layoutY="262.0" text="C" textFill="#fffbfb">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </Label>
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>
