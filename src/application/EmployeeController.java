@@ -29,11 +29,29 @@ public class EmployeeController implements Initializable {
 
 	}
 
+	/**
+	 * Gets username of user as a passed parameter from previous class. Sets the
+	 * welcome label message.
+	 * 
+	 * @author Aakash
+	 * @param user
+	 *            the username of the user
+	 */
 	public void getUser(String user) {
 		userName = user;
 		welcomeLbl.setText("Welcome employee, " + user + ".");
 	}
 
+	/**
+	 * Launches the login view. Creates new pane by loading login fxml, and a
+	 * new scene from the pane. Gets the stage information from the event source
+	 * and sets the new scene.
+	 * 
+	 * @author Aakash
+	 * @param event
+	 *            ActionEvent after logout button is pressed
+	 * @throws IOException
+	 */
 	public void Logout(ActionEvent event) {
 		FXMLLoader loader = new FXMLLoader();
 		try {
@@ -46,6 +64,16 @@ public class EmployeeController implements Initializable {
 		}
 	}
 
+	/**
+	 * Launches the add movie view. Creates new pane by loading AddMovie fxml,
+	 * and a new scene from the pane. Gets the stage information from the event
+	 * source and sets the new scene.
+	 * 
+	 * @author Aakash
+	 * @param event
+	 *            ActionEvent after Add Movie button is pressed
+	 * @throws IOException
+	 */
 	public void AddMovie(ActionEvent event) {
 		FXMLLoader loader = new FXMLLoader();
 		try {
@@ -59,7 +87,17 @@ public class EmployeeController implements Initializable {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * Launches the search movie view. Creates new pane by loading SearchMovie
+	 * fxml, and a new scene from the pane. Gets the stage information from the
+	 * event source and sets the new scene.
+	 * 
+	 * @author Aakash
+	 * @param event
+	 *            ActionEvent after Search Movie button is pressed
+	 * @throws IOException
+	 */
 	public void SearchMovie(ActionEvent event) {
 		FXMLLoader loader = new FXMLLoader();
 		try {

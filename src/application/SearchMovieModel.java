@@ -4,54 +4,65 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class SearchMovieModel {
-	
-	
 
 	public static ArrayList<String[]> searchMovie (String title, String date) throws SQLException {
 		String query;
+		Statement stm = null;
 		PreparedStatement pstm = null;
 		ResultSet resultSet = null;
 		int x;
 		
-		if (title.isEmpty()) {
+		if (title.isEmpty() & date.isEmpty()) {
 			x = 0;
+			query = "select * from movies";
+		}
+		
+		else if (title.isEmpty()) {
+			x = 1;
 			query = "select * from movies where date = ?";
 		}
 		
 		else if (date.isEmpty()) {
-			x=1;
+			x=2;
 			query = "select * from movies where title = ?";
 		}
 		
 		else {
-			x=2;
+			x=3;
 			query = "select * from movies where title = ? and date = ?";
 		}
 		
-		
 		Connection connection = SQLiteConnection.Connector();
-		try {
-			pstm = connection.prepareStatement(query);
-			
+		try {	
 			switch(x) {
-			case 0: 
-				pstm.setString(1, date);
+			case 0:
+				stm = connection.createStatement();
+				resultSet = stm.executeQuery(query);
 				break;
-				
+			
 			case 1:
-				pstm.setString(1, title);
+				pstm = connection.prepareStatement(query);
+				pstm.setString(1, date);
+				resultSet = pstm.executeQuery();
 				break;
 				
-			case 2: 	
+			case 2:
+				pstm = connection.prepareStatement(query);
+				pstm.setString(1, title);
+				resultSet = pstm.executeQuery();
+				break;
+				
+			case 3:
+				pstm = connection.prepareStatement(query);
 				pstm.setString(1, title);
 				pstm.setString(2, date);
+				resultSet = pstm.executeQuery();
 				break;
 			}
-
-			resultSet = pstm.executeQuery();
 			
 			ArrayList<String[]> results= new ArrayList<String[]>();
 			

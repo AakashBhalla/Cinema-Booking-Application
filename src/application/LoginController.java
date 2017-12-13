@@ -38,10 +38,11 @@ public class LoginController implements Initializable {
 	private Button btnLogin;
 
 	/**
-	 * Called to {@link initialize} the Login Controller after its root element
+	 * Called to initialize the Login Controller after its root element
 	 * has been completely processed. Checks whether the application is
 	 * connected to the database and displays error message it is not.
 	 * 
+	 * @author Aakash
 	 * @param location
 	 *            The location used to resolve relative paths for the root
 	 *            object, or null if the location is not known.
@@ -64,6 +65,8 @@ public class LoginController implements Initializable {
 	 * Key Events are used to track whether caps lock state is changed. Mouse
 	 * Events are used to display a warning message whenever a user clicks into
 	 * a textfield and capslock is on.
+	 * 
+	 * @author Aakash
 	 */
 	public void capsLockState() {
 		for (TextField t : Arrays.asList(txtUsername, txtPassword)) {
@@ -117,8 +120,11 @@ public class LoginController implements Initializable {
 	 * button is pressed. If they are, detects the role of the user and calls
 	 * methods to launch either the employee or customer view.
 	 * 
+	 * @author Aakash
 	 * @param event
 	 *            ActionEvent after login is pressed
+	 * @throws SQLException
+	 * @throws IOException
 	 */
 	public void Login(ActionEvent event) {
 		try {
@@ -157,10 +163,12 @@ public class LoginController implements Initializable {
 	 * loading customer fxml, and a new scene from the pane. Gets the stage
 	 * information from the event source and sets the new scene.
 	 * 
+	 * @author Aakash
 	 * @param event
 	 *            ActionEvent after login button is pressed
 	 * @param ID
 	 *            ID that is associated with the customer and used for bookings
+	 * @throws IOException
 	 */
 	private void launchCustomer(ActionEvent event, String ID) throws IOException {
 		FXMLLoader loader = new FXMLLoader();
@@ -180,8 +188,11 @@ public class LoginController implements Initializable {
 	 * and a new scene from the pane. Gets the stage information from the event
 	 * source and sets the new scene.
 	 * 
+	 * @author Aakash
 	 * @param event
 	 *            ActionEvent after login button is pressed
+	 * 
+	 * @throws IOException
 	 */
 	private void launchEmployee(ActionEvent event) throws IOException {
 		FXMLLoader loader = new FXMLLoader();
@@ -194,5 +205,4 @@ public class LoginController implements Initializable {
 		Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow());
 		window.setScene(employeeScene);
 	}
-
 }
