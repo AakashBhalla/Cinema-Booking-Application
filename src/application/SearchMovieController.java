@@ -173,7 +173,8 @@ public class SearchMovieController implements Initializable {
 			int bookedSeats = 12 - Integer.valueOf(arr[6]);
 			int availableSeats = Integer.valueOf(arr[6]);
 
-			// create Movie object and add as row
+			// create Movie object and add to the observable array list (a row).
+			// Set the table view to display the observable array list
 			Movie entry = new Movie(arrTitle, arrDate, arrTime, bookedSeats, availableSeats);
 			data.add(entry);
 		}
@@ -186,6 +187,7 @@ public class SearchMovieController implements Initializable {
 	 * particular movie
 	 * 
 	 * @author Aakash
+	 * @throws IOException
 	 */
 	private void configureTableView() {
 		// add new column that will contain a button in the cell
@@ -194,15 +196,19 @@ public class SearchMovieController implements Initializable {
 		viewCol.setMaxWidth(70);
 		viewCol.setResizable(false);
 
+		// specify a cell factory for each column using references to the
+		// corresponding methods of the Movie class i.e. "title" to getTitle()
 		title.setCellValueFactory(new PropertyValueFactory<Movie, String>("title"));
 		date.setCellValueFactory(new PropertyValueFactory<Movie, String>("date"));
 		time.setCellValueFactory(new PropertyValueFactory<Movie, String>("time"));
-		// calls method getBSeats()
+		// note: calls method getBSeats()
 		bSeats.setCellValueFactory(new PropertyValueFactory<Movie, Integer>("bSeats"));
 		aSeats.setCellValueFactory(new PropertyValueFactory<Movie, Integer>("aSeats"));
 
 		tableResults.setVisible(false);
 
+		// Define the table column which contains table cells that contain a
+		// button.
 		Callback<TableColumn<Movie, String>, TableCell<Movie, String>> cellFactory = //
 				new Callback<TableColumn<Movie, String>, TableCell<Movie, String>>() {
 					@Override
@@ -219,13 +225,21 @@ public class SearchMovieController implements Initializable {
 									setText(null);
 								} else {
 									btn.setOnAction(event -> {
+
+										// when the button is pressed it creates
+										// a Movie object based on the row
+										// clicked
 										Movie movie = getTableView().getItems().get(getIndex());
+										// cycle through the arrays within the
+										// results observable array list
 										for (int i = 0; i < results.size(); i++) {
 											String[] arr = results.get(i);
+											// once the corresponding array is
+											// found, the Screen view can be
+											// launched passing the array as a
+											// parameter
 											if (arr[1].equals(movie.getTitle()) & arr[2].equals(movie.getDate())
 													& arr[3].equals(movie.getTime())) {
-												// System.out.print(Arrays.toString(arr)
-												// + "from updateItem");
 												try {
 													launchScreen(event, arr);
 												} catch (IOException e) {
@@ -242,20 +256,19 @@ public class SearchMovieController implements Initializable {
 						return cell;
 					}
 				};
-
 		viewCol.setCellFactory(cellFactory);
 	}
 
 	/**
 	 * Creates a new text file named by the local date and time in the
 	 * ExportFiles folder and adds the information that is present in the table,
-	 * including title, date, time, and number of booked and available seats.
+	 * including title, date, time, and number of booked and available seats as
+	 * a comma seperated list.
 	 * 
 	 * @author Aakash
 	 * @throws IOException
 	 */
 	public void exportFile() {
-
 		try {
 			fileName = "";
 
@@ -270,11 +283,8 @@ public class SearchMovieController implements Initializable {
 			fileName = txtTitle.getText() + " showings";
 			e1.printStackTrace();
 		}
-		System.out.print(LocalDateTime.now().toString()); // delet this
+		System.out.print(LocalDateTime.now().toString());
 		try {
-			// File file = new File(
-			// "ExportFiles/" + LocalDateTime.now().toString().replaceAll("/",
-			// ".").replaceAll(":", ".") + ".txt");
 			File file = new File("ExportFiles/" + fileName + ".txt");
 			file.getParentFile().mkdirs();
 			if (!file.exists()) {
