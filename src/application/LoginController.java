@@ -4,6 +4,7 @@ import java.awt.Toolkit;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -22,7 +23,9 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class LoginController implements Initializable {
-	public LoginModel loginModel = new LoginModel();
+	// instantiates LoginModel class
+	private LoginModel loginModel = new LoginModel();
+	// returns whether caps lock is on (true) or off(false)
 	private Boolean isOn = (Toolkit.getDefaultToolkit().getLockingKeyState(java.awt.event.KeyEvent.VK_CAPS_LOCK));
 
 	@FXML
@@ -34,71 +37,65 @@ public class LoginController implements Initializable {
 	@FXML
 	private Button btnLogin;
 
+	/**
+	 * Called to {@link initialize} the Login Controller after its root element
+	 * has been completely processed. Checks whether the application is
+	 * connected to the database and displays error message it is not.
+	 * 
+	 * @param location
+	 *            The location used to resolve relative paths for the root
+	 *            object, or null if the location is not known.
+	 * @param resources
+	 *            The resources used to localize the root object, or null if the
+	 *            object was not localized.
+	 * @see initialize
+	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		if (loginModel.isDbConnected()) {
-			isConnected.setText("Connected to Database");
+			isConnected.setText("Enter your login credentials");
 			capsLockState();
 		} else {
 			isConnected.setText("Not connected to Database - contact Administrator");
 		}
 	}
 
+	/**
+	 * Key Events are used to track whether caps lock state is changed. Mouse
+	 * Events are used to display a warning message whenever a user clicks into
+	 * a textfield and capslock is on.
+	 */
 	public void capsLockState() {
-		txtUsername.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				if (isOn) {
-					isConnected.setText("Warning - Caps lock is on");
-				} else if (!isOn) {
-					isConnected.setText("");
-				}
-			}
-
-		});
-
-		txtUsername.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent keyEvent) {
-				if (keyEvent.getCode() == KeyCode.CAPS) {
+		for (TextField t : Arrays.asList(txtUsername, txtPassword)) {
+			t.setOnMouseClicked(new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent event) {
 					if (isOn) {
-						isConnected.setText("");
-						isOn = false;
-					} else if (!isOn) {
 						isConnected.setText("Warning - Caps lock is on");
-						isOn = true;
+					} else if (!isOn) {
+						isConnected.setText("");
 					}
 				}
-			}
-		});
+			});
 
-		txtPassword.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				if (isOn) {
-					isConnected.setText("Warning - Caps lock is on");
-				} else if (!isOn) {
-					isConnected.setText("");
-				}
-			}
-
-		});
-
-		txtPassword.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent keyEvent) {
-				if (keyEvent.getCode() == KeyCode.CAPS) {
-					if (isOn) {
-						isConnected.setText("");
-						isOn = false;
-					} else if (!isOn) {
-						isConnected.setText("Warning - Caps lock is on");
-						isOn = true;
+			t.setOnKeyPressed(new EventHandler<KeyEvent>() {
+				@Override
+				public void handle(KeyEvent keyEvent) {
+					if (keyEvent.getCode() == KeyCode.CAPS) {
+						if (isOn) {
+							isConnected.setText("");
+							isOn = false;
+						} else if (!isOn) {
+							isConnected.setText("Warning - Caps lock is on");
+							isOn = true;
+						}
 					}
 				}
-			}
-		});
+			});
+		}
 
+		// continues to track changes on whether capslock state if the
+		// focus is on the button
 		btnLogin.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent keyEvent) {
@@ -115,49 +112,85 @@ public class LoginController implements Initializable {
 		});
 	}
 
+	/**
+	 * First checks whether the login credentials are correct when the login
+	 * button is pressed. If they are, detects the role of the user and calls
+	 * methods to launch either the employee or customer view.
+	 * 
+	 * @param event
+	 *            ActionEvent after login is pressed
+	 */
 	public void Login(ActionEvent event) {
 		try {
-			if (loginModel.isLogin(txtUsername.getText(), txtPassword.getText())) {
-				if (loginModel.roleLogin(txtUsername.getText(), txtPassword.getText()).equals("employee")) {
+			String username = txtUsername.getText();
+			String password = txtPassword.getText();
+			// check whether username/password credentials are correct
+			if (loginModel.isLogin(username, password)) {
+				// get ID and role of user
+				String[] roleLogin = (loginModel.roleLogin(username, password));
+				String ID = roleLogin[0];
+				String role = roleLogin[1];
+				if (role.equals("employee")) {
 					launchEmployee(event);
 				}
-				if (loginModel.roleLogin(txtUsername.getText(), txtPassword.getText()).equals("customer")) {
-					launchCustomer(event);
+				if (role.equals("customer")) {
+					launchCustomer(event, ID);
 				} else {
+					// if database does not have role entered, nothing will be
+					// launched
 					isConnected.setText("role not detected");
 				}
 
 			} else {
-				isConnected.setText("username and password is not correct");
+				isConnected.setText("username and/or password is not correct");
 			}
 		} catch (SQLException e) {
-			isConnected.setText("username and password is not correct");
+			isConnected.setText("username and/or password is not correct");
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void launchCustomer(ActionEvent event) throws IOException {
-		isConnected.setText("username and password is correct");
+	/**
+	 * Launches the customer view of the application. Creates new pane by
+	 * loading customer fxml, and a new scene from the pane. Gets the stage
+	 * information from the event source and sets the new scene.
+	 * 
+	 * @param event
+	 *            ActionEvent after login button is pressed
+	 * @param ID
+	 *            ID that is associated with the customer and used for bookings
+	 */
+	private void launchCustomer(ActionEvent event, String ID) throws IOException {
 		FXMLLoader loader = new FXMLLoader();
 		Pane customerPane = loader.load(getClass().getResource("/application/Customer.fxml").openStream());
 		CustomerController customerController = (CustomerController) loader.getController();
+		// passes parameters username and ID
 		customerController.getUser(txtUsername.getText());
+		customerController.getID(ID);
 		Scene customerScene = new Scene(customerPane);
-		// This line gets the Stage information
+		// This line gets the Stage information from the event source
 		Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow());
 		window.setScene(customerScene);
 	}
 
+	/**
+	 * Launches the employee view. Creates new pane by loading employee fxml,
+	 * and a new scene from the pane. Gets the stage information from the event
+	 * source and sets the new scene.
+	 * 
+	 * @param event
+	 *            ActionEvent after login button is pressed
+	 */
 	private void launchEmployee(ActionEvent event) throws IOException {
-		isConnected.setText("username and password is correct");
 		FXMLLoader loader = new FXMLLoader();
 		Pane employeePane = loader.load(getClass().getResource("/application/Employee.fxml").openStream());
 		EmployeeController employeeController = (EmployeeController) loader.getController();
+		// pass parameter username
 		employeeController.getUser(txtUsername.getText());
 		Scene employeeScene = new Scene(employeePane);
-		// This line gets the Stage information
+		// This line gets the Stage information from the event source
 		Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow());
 		window.setScene(employeeScene);
 	}

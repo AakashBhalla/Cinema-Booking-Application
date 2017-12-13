@@ -3,8 +3,9 @@ package application;
 import java.sql.*;
 
 public class LoginModel {
-	Connection connection;
+	private Connection connection;
 
+	/** Generates a connection object. If unsuccessful, application exits. */
 	public LoginModel() {
 		connection = SQLiteConnection.Connector();
 		if (connection == null) {
@@ -13,6 +14,11 @@ public class LoginModel {
 		}
 	}
 
+	/**
+	 * Checks whether the application is connected to the database.
+	 * 
+	 * @return boolean
+	 */
 	public boolean isDbConnected() {
 		try {
 			return !connection.isClosed();
@@ -22,36 +28,70 @@ public class LoginModel {
 		}
 	}
 
+	/**
+	 * Checks whether the login username/password credentials entered match a
+	 * pair in the database login table.
+	 * 
+	 * @param user
+	 *            the username entered by the user
+	 * @param pass
+	 *            the password entered by the user
+	 * 
+	 * @return boolean
+	 */
 	public boolean isLogin(String user, String pass) throws SQLException {
-		PreparedStatement preparedStatement = null;
+		PreparedStatement pstm = null;
 		ResultSet resultSet = null;
 		String query = "select * from login where username = ? and password = ?";
 		try {
-			preparedStatement = connection.prepareStatement(query);
-			preparedStatement.setString(1, user);
-			preparedStatement.setString(2, pass);
+			pstm = connection.prepareStatement(query);
+			
+			// sets parameters of query
+			pstm.setString(1, user);
+			pstm.setString(2, pass);
 
-			resultSet = preparedStatement.executeQuery();
-			return resultSet.next() ? true:false;
+			// execute query
+			resultSet = pstm.executeQuery();
+			
+			// return true if row exists
+			return resultSet.next() ? true : false;
 		} catch (Exception e) {
 			return false;
 		} finally {
-			preparedStatement.close();
+			pstm.close();
 		}
 	}
 
-	public String roleLogin(String user, String pass) throws SQLException {
+	/**
+	 * Selects all columns from the login table where the username/password
+	 * credentials entered by the user match.
+	 * 
+	 * @param user
+	 *            the username entered by the user
+	 * 
+	 * @param pass
+	 *            the password entered by the user
+	 * 
+	 * @return String array containing the id and role position
+	 */
+	public String[] roleLogin(String user, String pass) throws SQLException {
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
 		String query = "select * from login where username = ? and password = ?";
 		try {
 			preparedStatement = connection.prepareStatement(query);
+			
+			//sets parameters of query
 			preparedStatement.setString(1, user);
 			preparedStatement.setString(2, pass);
-
+			
+			//execute query
 			resultSet = preparedStatement.executeQuery();
+
+			// loops through resultSet
 			if (resultSet.next()) {
-				return resultSet.getString("position");
+				String[] info = { resultSet.getString("id"), resultSet.getString("position") };
+				return info;
 			} else {
 				return null;
 			}

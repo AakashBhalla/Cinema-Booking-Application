@@ -7,6 +7,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ResourceBundle;
@@ -118,7 +119,8 @@ public class SearchMovieController implements Initializable {
 		tableResults.getItems().clear(); //clears table view whenever a new search is made
 		String date = null;
 		try {
-			date = datePicker.getValue().toString();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			date = datePicker.getValue().format(formatter).toString();
 		} catch (Exception e) {
 			date = ""; //catches NullPointerException if date picker is empty
 			System.out.println(e);
@@ -249,9 +251,11 @@ public class SearchMovieController implements Initializable {
 		ScreenController screenController = (ScreenController) loader.getController();
 		screenController.getUser(userName);
 		screenController.getArray(movieArr);
+		screenController.getRole("employee");
 		screenController.initScreen();
 		// This line gets the Stage information
 		Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow());
 		window.setScene(screenScene);
 	}
+
 }

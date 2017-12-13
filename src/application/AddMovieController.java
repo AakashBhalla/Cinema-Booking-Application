@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ResourceBundle;
@@ -119,7 +120,10 @@ public class AddMovieController implements Initializable {
 	public void Submit(ActionEvent event) throws SQLException {
 		if (fieldsValid()) {
 			lblMsg.setText("Movie added!");
-			AddMovieModel.insertMovie(txtTitle.getText(), datePicker.getValue().toString(), timeString(),
+			
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			String date = datePicker.getValue().format(formatter).toString();	
+			AddMovieModel.insertMovie(txtTitle.getText(), date, timeString(),
 					txtImg.getText(), txtDescription.getText(), noSeats);
 			AddMovieModel.insertScreen();
 			

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400" prefWidth="500" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.EditProfileController">
+   <children>
+      <Button fx:id="btnBack" layoutX="144.0" layoutY="354.0" mnemonicParsing="false" onAction="#Back" text="Back" />
+      <Label alignment="CENTER" layoutY="56.0" prefHeight="17.0" prefWidth="500.0" text="EDIT PROFILE">
+         <font>
+            <Font name="System Bold" size="21.0" />
+         </font>
+      </Label>
+      <Label layoutX="53.0" layoutY="102.0" text="First name:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="53.0" layoutY="136.0" text="Last name:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="53.0" layoutY="173.0" text="Email:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtfName" layoutX="143.0" layoutY="102.0" prefHeight="25.0" prefWidth="322.0" />
+      <TextField fx:id="txtlName" layoutX="143.0" layoutY="136.0" prefHeight="25.0" prefWidth="322.0" />
+      <TextField fx:id="txtEmail" layoutX="144.0" layoutY="173.0" prefHeight="25.0" prefWidth="322.0" />
+      <Button fx:id="btnUpdate" layoutX="278.0" layoutY="354.0" mnemonicParsing="false" onAction="#updateInfo" text="Update" />
+      <Label fx:id="lblMsg" alignment="CENTER" layoutX="1.0" layoutY="319.0" prefHeight="17.0" prefWidth="500.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <TableView fx:id="tableResults" layoutY="211.0" prefHeight="92.0" prefWidth="500.0">
+        <columns>
+          <TableColumn fx:id="title" prefWidth="75.0" text="Title" />
+          <TableColumn fx:id="date" prefWidth="75.0" text="Date" />
+          <TableColumn fx:id="time" prefWidth="75.0" text="Time" />
+          <TableColumn fx:id="seats" prefWidth="75.0" text="Seats" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

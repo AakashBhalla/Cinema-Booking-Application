@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -53,7 +54,7 @@ public class BookMovieController implements Initializable {
 	@FXML
 	private TableColumn<Movie, Integer> bSeats, aSeats;
 
-	private String userName;
+	private String userName, ID;
 	
 	private ArrayList<String[]> results;
 
@@ -61,6 +62,10 @@ public class BookMovieController implements Initializable {
 
 	public void getUser(String user) {
 		userName = user;
+	}
+	
+	public void getID(String ID) {
+		this.ID = ID;	
 	}
 
 	public void Back(ActionEvent event) {
@@ -70,6 +75,7 @@ public class BookMovieController implements Initializable {
 			customerPane = loader.load(getClass().getResource("/application/Customer.fxml").openStream());
 			CustomerController customerController = (CustomerController) loader.getController();
 			customerController.getUser(userName);
+			customerController.getID(ID);
 			Scene customerScene = new Scene(customerPane);
 			// This line gets the Stage information
 			Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow());
@@ -94,7 +100,7 @@ public class BookMovieController implements Initializable {
 					public void updateItem(LocalDate item, boolean empty) {
 						super.updateItem(item, empty);
 
-						if (item.isBefore(LocalDate.now().plusDays(1))) {
+						if (item.isBefore(LocalDate.now())) {
 							setDisable(true);
 							setStyle("-fx-background-color : #ffc0cb;");
 						}
@@ -103,7 +109,7 @@ public class BookMovieController implements Initializable {
 			}
 		};
 		datePicker.setDayCellFactory(dayCellFactory);
-		datePicker.setValue(LocalDate.now().plusDays(1));
+		datePicker.setValue(LocalDate.now());
 	}
 	
 	private void configureTableView() {
@@ -165,7 +171,8 @@ public class BookMovieController implements Initializable {
 		tableResults.getItems().clear(); //clears table view whenever a new search is made
 		String date = null;
 		try {
-			date = datePicker.getValue().toString();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			date = datePicker.getValue().format(formatter).toString();
 		} catch (Exception e) {
 			date = ""; //catches NullPointerException if date picker is empty
 			System.out.println(e);
@@ -193,6 +200,8 @@ public class BookMovieController implements Initializable {
 		ScreenController screenController = (ScreenController) loader.getController();
 		screenController.getUser(userName);
 		screenController.getArray(movieArr);
+		screenController.getRole("customer");
+		screenController.getID(ID);
 		screenController.initScreen();
 		// This line gets the Stage information
 		Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow());

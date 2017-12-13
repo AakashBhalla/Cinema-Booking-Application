@@ -11,7 +11,9 @@ public class Movie {
 	private final SimpleStringProperty time;
 	private final SimpleIntegerProperty bSeats;
 	private final SimpleIntegerProperty aSeats;
+	private final SimpleStringProperty seats;
 	private Button button;
+
 
 	public Movie (String title, String date, String time, Integer bSeats, Integer aSeats) {
 		super();
@@ -21,6 +23,16 @@ public class Movie {
 		this.bSeats = new SimpleIntegerProperty(bSeats);
 		this.aSeats = new SimpleIntegerProperty(aSeats);
 		this.button = new Button("View");
+		this.seats = null;
+	}
+
+	public Movie (String title, String date, String time, String seats) {
+		this.title = new SimpleStringProperty(title);
+		this.date = new SimpleStringProperty(date);
+		this.time = new SimpleStringProperty(time);
+		this.seats = new SimpleStringProperty(seats);
+		this.bSeats = null;
+		this.aSeats = null;
 	}
 
 	public String getTitle() {
@@ -68,5 +80,13 @@ public class Movie {
 	
 	public Button getButton() {
 		return button;
+	}
+	
+	public String getSeats() {
+		return seats.get();
+	}
+	
+	public void setSeats(String sSeats) {
+		seats.set(sSeats);
 	}
 }

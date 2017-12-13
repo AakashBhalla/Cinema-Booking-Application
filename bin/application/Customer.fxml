@@ -16,6 +16,7 @@
                </font>
             </Label>
             <Button fx:id="btnBook" layoutX="266.0" layoutY="122.0" mnemonicParsing="false" onAction="#launchBookMovie" text="Book Movie" />
+            <Button layoutX="255.0" layoutY="174.0" mnemonicParsing="false" onAction="#launchManageBookings" text="Manage Bookings" />
          </children>
       </AnchorPane>
    </top>
@@ -23,6 +24,7 @@
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="btnLogout" layoutX="223.0" layoutY="137.0" mnemonicParsing="false" onAction="#Logout" text="Logout" />
+            <Button layoutX="213.0" layoutY="29.0" mnemonicParsing="false" onAction="#launchEditProfile" text="Edit Profile" />
          </children>
       </AnchorPane>
    </bottom>

@@ -19,11 +19,15 @@ public class CustomerController {
 	@FXML
 	private Button btnBook;
 	
-	private String userName;
+	private String userName, ID;
 
 	public void getUser(String user) {
 		welcomeLbl.setText("Welcome customer, " + user + ".");
 		userName = user;
+	}
+	
+	public void getID(String ID) {
+		this.ID = ID;	
 	}
 
 	public void Logout(ActionEvent event) {
@@ -45,8 +49,41 @@ public class CustomerController {
 			Scene bookMovieScene = new Scene(bookMoviePane);
 			BookMovieController bookMovieController = (BookMovieController) loader.getController();
 			bookMovieController.getUser(userName);
+			bookMovieController.getID(ID);
 			Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow()); //gets Stage information
 			window.setScene(bookMovieScene);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void launchManageBookings(ActionEvent event) {
+		FXMLLoader loader = new FXMLLoader();
+		try {
+			Pane manageBookingsPane = loader.load(getClass().getResource("/application/ManageBookings.fxml").openStream());
+			Scene manageBookingsScene = new Scene(manageBookingsPane);
+			ManageBookingsController manageBookingsController = (ManageBookingsController) loader.getController();
+			manageBookingsController.getUser(userName);
+			manageBookingsController.getID(ID);
+			manageBookingsController.getBookingHistory();
+			Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow()); //gets Stage information
+			window.setScene(manageBookingsScene);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void launchEditProfile(ActionEvent event) {
+		FXMLLoader loader = new FXMLLoader();
+		try {
+			Pane editProfilePane = loader.load(getClass().getResource("/application/EditProfile.fxml").openStream());
+			Scene editProfileScene = new Scene(editProfilePane);
+			EditProfileController editProfileController = (EditProfileController) loader.getController();
+			editProfileController.getUser(userName);
+			editProfileController.getID(ID);
+			editProfileController.initEditProfile();
+			Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow()); //gets Stage information
+			window.setScene(editProfileScene);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
