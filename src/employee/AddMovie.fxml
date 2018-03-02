@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400" prefWidth="500" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="employee.AddMovieController">
+   <children>
+      <Label layoutX="77.0" layoutY="62.0" text="Title: ">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+      <Label layoutX="77.0" layoutY="94.0" text="Date:">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+      <Label layoutX="77.0" layoutY="129.0" text="Time:">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+      <Label layoutX="77.0" layoutY="163.0" text="Image URL:">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+      <Label layoutX="76.0" layoutY="197.0" text="Description:">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+      <TextField fx:id="txtTitle" layoutX="166.0" layoutY="58.0" prefHeight="25.0" prefWidth="246.0" />
+      <DatePicker fx:id="datePicker" layoutX="166.0" layoutY="90.0" prefHeight="25.0" prefWidth="246.0" />
+      <TextField fx:id="txt1" layoutX="166.0" layoutY="125.0" onAction="#timeControl" prefHeight="25.0" prefWidth="28.0" promptText="00" />
+      <Label layoutX="194.0" layoutY="129.0" text=":" />
+      <TextField fx:id="txt2" layoutX="197.0" layoutY="125.0" onAction="#timeControl" prefHeight="25.0" prefWidth="29.0" promptText="00" />
+      <Label layoutX="225.0" layoutY="129.0" text="-" />
+      <TextField fx:id="txt3" layoutX="229.0" layoutY="125.0" onAction="#timeControl" prefHeight="25.0" prefWidth="28.0" promptText="00" />
+      <Label layoutX="257.0" layoutY="129.0" text=":" />
+      <TextField fx:id="txt4" layoutX="260.0" layoutY="125.0" onAction="#timeControl" prefHeight="25.0" prefWidth="28.0" promptText="00" />
+      <TextField fx:id="txtImg" layoutX="166.0" layoutY="159.0" prefHeight="25.0" prefWidth="246.0" />
+      <TextArea fx:id="txtDescription" layoutX="166.0" layoutY="197.0" prefHeight="140.0" prefWidth="246.0" />
+      <Label fx:id="lblMsg" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="-3.0" layoutY="344.0" prefHeight="17.0" prefWidth="506.0" text="All fields must be filled to submit." />
+      <Button fx:id="btnSubmit" layoutX="274.0" layoutY="365.0" mnemonicParsing="false" onAction="#Submit" text="Submit" />
+      <Button fx:id="btnCancel" layoutX="167.0" layoutY="365.0" mnemonicParsing="false" onAction="#Cancel" text="Back" />
+      <Label alignment="CENTER" layoutY="18.0" prefHeight="17.0" prefWidth="500.0" style="-fx-background-color: darkgray;" text="ADD MOVIE">
+         <font>
+            <Font name="System Bold" size="21.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

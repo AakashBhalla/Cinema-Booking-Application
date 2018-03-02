@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400" prefWidth="500" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="customer.CustomerController">
+   <top>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="welcomeLbl" layoutX="27.0" layoutY="22.0" prefHeight="21.0" prefWidth="402.0" text="employee welcome label">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnBook" layoutX="214.0" layoutY="125.0" mnemonicParsing="false" onAction="#launchBookMovie" text="Book Movie" />
+            <Button layoutX="198.0" layoutY="174.0" mnemonicParsing="false" onAction="#launchManageBookings" text="Manage Bookings" />
+            <Label alignment="CENTER" layoutY="69.0" prefHeight="31.0" prefWidth="506.0" style="-fx-background-color: darkgray;" text="WELCOME!">
+               <font>
+                  <Font name="System Bold" size="21.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </top>
+   <bottom>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="btnLogout" layoutX="223.0" layoutY="73.0" mnemonicParsing="false" onAction="#Logout" text="Logout" />
+            <Button layoutX="213.0" layoutY="24.0" mnemonicParsing="false" onAction="#launchEditProfile" text="Edit Profile" />
+         </children>
+      </AnchorPane>
+   </bottom>
+</BorderPane>
